@@ -2,7 +2,10 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/takumines/gin-jwt-auth/db"
 	"github.com/takumines/gin-jwt-auth/models"
@@ -66,5 +69,20 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, user)
+
+	// JWT
+	claims := jwt.StandardClaims{
+		Issuer:    strconv.Itoa(int(user.ID)),
+		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+	}
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token, err := jwtToken.SignedString([]byte("secret"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "Server Error")
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"jwt": token,
+	})
 }
