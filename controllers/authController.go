@@ -82,6 +82,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	// Cookie
+	c.SetCookie("jwt", token, time.Now().Add(time.Hour*24).Second(), "/", "", false, true)
+
 	c.JSON(http.StatusOK, gin.H{
 		"jwt": token,
 	})
