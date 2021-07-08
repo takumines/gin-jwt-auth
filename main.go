@@ -2,14 +2,13 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/takumines/gin-jwt-auth/db"
+	"github.com/takumines/gin-jwt-auth/routes"
 )
 
 func main() {
 	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hello World",
-		})
-	})
+	db.Init()
+	routes.Setup(r)
 	r.Run(":8080")
 }
