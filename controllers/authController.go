@@ -113,3 +113,11 @@ func User(c *gin.Context) {
 
 	c.JSON(http.StatusOK, user)
 }
+
+func Logout(c *gin.Context) {
+	c.SetCookie("jwt", "", time.Now().Add(-time.Hour).Second(), "/", "", false, true)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "success",
+	})
+}
