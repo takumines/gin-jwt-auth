@@ -35,6 +35,7 @@ func main() {
 		// 許可したいアクセス元の一覧
 		AllowOrigins: []string{
 			"http://localhost:8080",
+			"http://localhost:3000",
 		},
 		// cookieなどの情報を必要とするかどうか
 		AllowCredentials: true,

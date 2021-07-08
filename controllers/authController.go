@@ -68,7 +68,7 @@ func Login(c *gin.Context) {
 
 	// passwordが一致しない場合
 	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(data["password"])); err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Incorrect password",
 		})
 		return

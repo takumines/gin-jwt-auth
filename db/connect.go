@@ -17,7 +17,7 @@ func Init() {
 
 	DB = connect
 
-	connect.AutoMigrate(&models.User{})
+	connect.AutoMigrate(&models.User{}, &models.PasswordReset{})
 	if err != nil {
 		panic(err)
 	}
