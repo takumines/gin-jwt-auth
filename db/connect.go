@@ -1,6 +1,7 @@
 package db
 
 import (
+	"github.com/takumines/gin-jwt-auth/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -15,4 +16,9 @@ func Init() {
 	}
 
 	DB = connect
+
+	connect.AutoMigrate(&models.User{})
+	if err != nil {
+		panic(err)
+	}
 }

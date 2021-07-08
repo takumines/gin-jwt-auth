@@ -7,4 +7,6 @@ import (
 
 func Setup(r *gin.Engine) {
 	r.GET("/", controllers.Home)
+
+	r.POST("/register", controllers.Register)
 }
