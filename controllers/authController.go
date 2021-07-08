@@ -12,6 +12,10 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type Claims struct {
+	jwt.StandardClaims
+}
+
 func Register(c *gin.Context) {
 	data := map[string]string{}
 
@@ -88,4 +92,24 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"jwt": token,
 	})
+}
+
+func User(c *gin.Context) {
+	// CookieからJWTを取得
+	cookie, _ := c.Cookie("jwt")
+	// tokenを取得
+	token, err := jwt.ParseWithClaims(cookie, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte("secret"), nil
+	})
+	if err != nil || !token.Valid {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "unauthenticated",
+		})
+	}
+	claims := token.Claims.(*Claims)
+	// User IDを取得
+	user := models.User{}
+	db.DB.Where("id = ?", claims.Issuer).First(&user)
+
+	c.JSON(http.StatusOK, user)
 }
